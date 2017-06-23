@@ -13,10 +13,12 @@ import { BaseView } from './base.view';
     <ul>
         <li *ngFor="let song of model.band.songs" (click)="routeToSong(song.id)">{{song.name}}</li>
     </ul>
+    <button>View it in a modal!</button>
     <h3>Band members:</h3>
     <ul>
         <li *ngFor="let musician of model.band.members">{{musician}}</li>
     </ul>
+    <button>View it in a modal!</button>
     `,
     styles: [`.left-panel { width: 50%; }`]
 })

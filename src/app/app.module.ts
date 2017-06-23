@@ -10,6 +10,7 @@ import { VIEWS } from './views/index';
 import { RESOLVES } from './resolves/index';
 import { SERVICES } from './services/index';
 import { model } from './reducers/model.reducer';
+import { ui } from './reducers/ui.reducer';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,7 @@ import { model } from './reducers/model.reducer';
         BrowserModule,
         HttpModule,
         RouterModule.forRoot(ROUTES),
-        StoreModule.provideStore({model})
+        StoreModule.provideStore({model, ui})
     ],
     providers: [
         ...RESOLVES,
