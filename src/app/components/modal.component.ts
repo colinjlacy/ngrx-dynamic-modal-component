@@ -63,7 +63,7 @@ import { ModalService } from '../services/modal.service';
     ]
 })
 export class DynamicModalComponent {
-    configuration:any;
+    configuration:iModalConfiguration;
     storeSubscription:any;
     currentComponent:ComponentRef<any> = null;
 
@@ -71,8 +71,7 @@ export class DynamicModalComponent {
 
     @HostBinding('class.open') open:boolean = false;
 
-    constructor(private resolver:ComponentFactoryResolver, private store:Store<any>, private modalSrvc:ModalService) {
-    }
+    constructor(private resolver:ComponentFactoryResolver, private store:Store<any>, private modalSrvc:ModalService) {}
 
     ngOnInit() {
         console.log(this.dynamicComponentContainer);
