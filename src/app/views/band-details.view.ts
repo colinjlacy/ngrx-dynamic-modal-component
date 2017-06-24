@@ -51,7 +51,13 @@ export class BandDetailsView extends BaseView {
         });
     }
 
-    private routeToFirstSong() {
-        this.router.navigate(['/', 'band', this.model.band.id, 'song', 1]).then(() => this.modalSrvc.closeModal());
+    private routeToFirstSong(data) {
+        if(!data) {
+            this.modalSrvc.setConfiguration({modalErrors: {
+                noSelectionError: 'You must choose a song if you would like to proceed!'
+            }})
+        } else {
+            this.router.navigate(['/', 'band', this.model.band.id, 'song', 1]).then(() => this.modalSrvc.closeModal());
+        }
     }
 }

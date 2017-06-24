@@ -12,7 +12,7 @@ import { ModalService } from '../services/modal.service';
             <div class="backdrop"></div>
             <div class="modal-container">
                 <div #dynamicComponentContainer></div>
-                <div class="modal-footer">
+                <div class="modal-footer" *ngIf="configuration">
                     <button class="modal-button" (click)="positiveAction()" *ngIf="!!configuration.positiveAction">Save</button>
                     <button class="modal-button" (click)="negativeAction()">Close</button>
                 </div>
@@ -77,28 +77,23 @@ export class DynamicModalComponent {
         console.log(this.dynamicComponentContainer);
         this.storeSubscription = this.store.select('ui')
             .subscribe((val:{modal: iModalConfiguration}) => {
-                this.configuration = val.modal;
-                if (!this.configuration || !this.configuration.component) {
+                console.log('val modal', val.modal);
+                if (!val.modal.open || !val.modal.component) {
                     this.open = false;
+                    if (this.currentComponent) this.currentComponent.destroy();
+                    this.configuration = val.modal;
+                    return;
+                } else if(!!this.configuration && this.configuration.open === val.modal.open) {
+                    this.configuration = val.modal;
                     return;
                 }
+                this.configuration = val.modal;
+
                 this.open = this.configuration.open;
+
                 const factory = this.resolver.resolveComponentFactory(this.configuration.component);
 
-                const injector = ReflectiveInjector.resolveAndCreate([{
-                    provide: 'modalData',
-                    useValue: this.configuration.modalData
-                }]);
-
-                const component = factory.create(injector);
-
-                this.dynamicComponentContainer.insert(component.hostView);
-
-                if (this.currentComponent) {
-                    this.currentComponent.destroy();
-                }
-
-                this.currentComponent = component;
+                this.dynamicComponentContainer.createComponent(factory);
             });
     }
 
@@ -108,7 +103,7 @@ export class DynamicModalComponent {
 
     negativeAction() {
         if (this.configuration.negativeAction) {
-            this.configuration.negativeAction.apply(this.configuration.actionContext);
+            this.configuration.negativeAction.apply(this.configuration.actionContext, [this.modalSrvc.data]);
         } else {
             this.modalSrvc.closeModal();
         }
@@ -116,7 +111,7 @@ export class DynamicModalComponent {
 
     positiveAction() {
         if (this.configuration.positiveAction) {
-            this.configuration.positiveAction.apply(this.configuration.actionContext);
+            this.configuration.positiveAction.apply(this.configuration.actionContext, [this.modalSrvc.data]);
         } else {
             this.modalSrvc.closeModal();
         }

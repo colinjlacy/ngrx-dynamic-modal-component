@@ -1,18 +1,15 @@
-import { Component } from '@angular/core';
-
-export interface iModalConfiguration {
-    open: boolean;
-    component: Component;
-    modalData: any;
-    actionContext?: any;
-    positiveAction?: Function;
-    negativeAction?: Function;
-}
+import { Component, Type } from '@angular/core';
 
 export interface iModalServiceOptions {
-    component: Component;
-    modalData: any;
+    component?: Type<Component>;
+    modalData?: any;
+    modalErrors?: any;
     actionContext?: any;
     positiveAction?: Function;
     negativeAction?: Function;
 }
+
+export interface iModalConfiguration extends iModalServiceOptions {
+    open: boolean;
+}
+
