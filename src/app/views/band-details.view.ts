@@ -38,7 +38,9 @@ export class BandDetailsView extends BaseView {
     openSongListingModal() {
         this.modalSrvc.openModal({
             component: SongListingComponent,
-            modalData: this.model.band.songs
+            modalData: this.model.band.songs,
+            actionContext: this,
+            positiveAction: this.routeToFirstSong
         });
     }
 
@@ -47,5 +49,9 @@ export class BandDetailsView extends BaseView {
             component: BandMemberListingComponent,
             modalData: this.model.band.members
         });
+    }
+
+    private routeToFirstSong() {
+        this.router.navigate(['/', 'band', this.model.band.id, 'song', 1]).then(() => this.modalSrvc.closeModal());
     }
 }

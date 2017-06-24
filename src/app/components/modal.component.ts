@@ -95,7 +95,6 @@ export class DynamicModalComponent {
 
                 this.dynamicComponentContainer.insert(component.hostView);
 
-                // Destroy the previously created component
                 if (this.currentComponent) {
                     this.currentComponent.destroy();
                 }
@@ -110,7 +109,7 @@ export class DynamicModalComponent {
 
     negativeAction() {
         if (this.configuration.negativeAction) {
-            this.configuration.negativeAction.apply();
+            this.configuration.negativeAction.apply(this.configuration.actionContext);
         } else {
             this.modalSrvc.closeModal();
         }
@@ -118,7 +117,7 @@ export class DynamicModalComponent {
 
     positiveAction() {
         if (this.configuration.positiveAction) {
-            this.configuration.positiveAction.apply();
+            this.configuration.positiveAction.apply(this.configuration.actionContext);
         } else {
             this.modalSrvc.closeModal();
         }
