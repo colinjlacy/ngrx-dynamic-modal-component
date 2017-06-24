@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterState } from '@angular/router';
 import { Store } from '@ngrx/store';
 
+import { BandMemberListingComponent } from '../components/band-member-listing.component';
+import { SongListingComponent } from '../components/song-listing.component';
+import { ModalService } from '../services/modal.service';
 import { BaseView } from './base.view';
 
 @Component({
@@ -13,22 +16,36 @@ import { BaseView } from './base.view';
     <ul>
         <li *ngFor="let song of model.band.songs" (click)="routeToSong(song.id)">{{song.name}}</li>
     </ul>
-    <button>View it in a modal!</button>
+    <button (click)="openSongListingModal()">View it in a modal!</button>
     <h3>Band members:</h3>
     <ul>
         <li *ngFor="let musician of model.band.members">{{musician}}</li>
     </ul>
-    <button>View it in a modal!</button>
+    <button (click)="openBandMemberListingModal()">View it in a modal!</button>
     `,
     styles: [`.left-panel { width: 50%; }`]
 })
 export class BandDetailsView extends BaseView {
 
-    constructor(public route:ActivatedRoute, private router: Router, public store: Store<any>) {
+    constructor(public route:ActivatedRoute, private router: Router, public store: Store<any>, private modalSrvc: ModalService) {
         super(store, route);
     }
 
     routeToSong(id) {
         this.router.navigate(['/', 'band', this.model.band.id, 'song', id]);
+    }
+
+    openSongListingModal() {
+        this.modalSrvc.openModal({
+            component: SongListingComponent,
+            modalData: this.model.band.songs
+        });
+    }
+
+    openBandMemberListingModal() {
+        this.modalSrvc.openModal({
+            component: BandMemberListingComponent,
+            modalData: this.model.band.members
+        });
     }
 }

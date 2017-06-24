@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from './app.component';
+import { COMPONENTS, SongListingComponent, BandMemberListingComponent } from './components/index';
 import { ROUTES } from './routes/index';
 import { VIEWS } from './views/index';
 import { RESOLVES } from './resolves/index';
@@ -15,7 +16,10 @@ import { ui } from './reducers/ui.reducer';
 @NgModule({
     declarations: [
         AppComponent,
-        ...VIEWS
+        ...VIEWS,
+        ...COMPONENTS,
+        SongListingComponent,
+        BandMemberListingComponent
     ],
     imports: [
         BrowserModule,
@@ -27,7 +31,11 @@ import { ui } from './reducers/ui.reducer';
         ...RESOLVES,
         ...SERVICES
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        SongListingComponent,
+        BandMemberListingComponent
+    ]
 })
 export class AppModule {
 }
