@@ -8,16 +8,14 @@ export class ModalService {
 
     actionData: any;
 
-    constructor(private store: Store<any>) {
-        this.actionData = {};
-    }
+    constructor(private store: Store<any>) {}
 
     openModal(opts: iModalServiceOptions) {
         this.store.dispatch({type: 'OPEN_MODAL', payload: Object.assign({}, {open: true}, opts)});
     }
 
     closeModal() {
-        this.actionData = {};
+        this.actionData = null;
         this.store.dispatch({type: 'CLOSE_MODAL'});
     }
 

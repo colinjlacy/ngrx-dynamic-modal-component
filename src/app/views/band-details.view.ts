@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterState } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { BandMemberListingComponent } from '../components/band-member-listing.component';
-import { SongListingComponent } from '../components/song-listing.component';
+import { BandMemberListingComponent } from './band-member-listing.modal.view';
+import { SongListingComponent } from './song-listing.modal.view';
 import { ModalService } from '../services/modal.service';
 import { BaseView } from './base.view';
 
@@ -51,13 +51,13 @@ export class BandDetailsView extends BaseView {
         });
     }
 
-    private routeToFirstSong(data) {
+    private routeToFirstSong(data: number) {
         if(!data) {
             this.modalSrvc.setConfiguration({modalErrors: {
                 noSelectionError: 'You must choose a song if you would like to proceed!'
             }})
         } else {
-            this.router.navigate(['/', 'band', this.model.band.id, 'song', 1]).then(() => this.modalSrvc.closeModal());
+            this.router.navigate(['/', 'band', this.model.band.id, 'song', data]).then(() => this.modalSrvc.closeModal());
         }
     }
 }

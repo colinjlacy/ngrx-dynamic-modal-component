@@ -76,24 +76,30 @@ export class DynamicModalComponent {
     ngOnInit() {
         console.log(this.dynamicComponentContainer);
         this.storeSubscription = this.store.select('ui')
-            .subscribe((val:{modal: iModalConfiguration}) => {
-                console.log('val modal', val.modal);
-                if (!val.modal.open || !val.modal.component) {
+            .map((raw: {modal: iModalConfiguration}) => raw.modal)
+            .subscribe((val: iModalConfiguration) => {
+
+                if (!val.open || !val.component) {
+
                     this.open = false;
                     if (this.currentComponent) this.currentComponent.destroy();
-                    this.configuration = val.modal;
+                    this.configuration = val;
                     return;
-                } else if(!!this.configuration && this.configuration.open === val.modal.open) {
-                    this.configuration = val.modal;
+
+                } else if(!!this.configuration && this.configuration.open === val.open) {
+
+                    this.configuration = val;
                     return;
+
                 }
-                this.configuration = val.modal;
+
+                this.configuration = val;
 
                 this.open = this.configuration.open;
 
                 const factory = this.resolver.resolveComponentFactory(this.configuration.component);
 
-                this.dynamicComponentContainer.createComponent(factory);
+                this.currentComponent = this.dynamicComponentContainer.createComponent(factory);
             });
     }
 

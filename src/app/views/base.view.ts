@@ -1,5 +1,6 @@
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
+import { iViewHooks } from '../models/view-hooks.models';
 
 export interface iBaseViewOptions {
     preserveData?: boolean,
@@ -8,15 +9,12 @@ export interface iBaseViewOptions {
 
 export class BaseView {
     model: any;
-    baseViewHooks: {
-        context: any,
-        initHooks: Array<{action: Function, arguments?: any[]}>,
-        destroyHooks: Array<{action: Function, arguments?: any[]}>
-    };
+    viewHooks: iViewHooks;
+
     private modelSubscription: any;
 
     constructor(public store: Store<any>, public route: ActivatedRoute, private options: iBaseViewOptions = {preserveData: false, preserveKeys: []}) {
-        this.baseViewHooks = {
+        this.viewHooks = {
             context: null,
             initHooks: [],
             destroyHooks: []
@@ -28,8 +26,8 @@ export class BaseView {
             .subscribe(val => {
                 this.model = val;
             });
-        this.baseViewHooks.initHooks.forEach((hook: any) => {
-            hook.action.call(this.baseViewHooks.context || this, ...hook.arguments);
+        this.viewHooks.initHooks.forEach((hook: any) => {
+            hook.action.call(this.viewHooks.context || this, ...hook.arguments);
         });
     }
 
@@ -42,8 +40,8 @@ export class BaseView {
             this.store.dispatch({type: 'REMOVE_DEPENDENCIES', payload: viewDependencyKeys});
             this.modelSubscription.unsubscribe();
         }
-        this.baseViewHooks.destroyHooks.forEach((hook: {action: Function, arguments?: any[]}) => {
-            hook.action.call(this.baseViewHooks.context || this, ...hook.arguments);
+        this.viewHooks.destroyHooks.forEach((hook: {action: Function, arguments?: any[]}) => {
+            hook.action.call(this.viewHooks.context || this, ...hook.arguments);
         });
     }
 }
